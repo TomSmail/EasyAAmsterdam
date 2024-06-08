@@ -1,28 +1,32 @@
 {
-    "manifest_version": 3,
-    "name": "Web Page Monitor",
-    "version": "1.0",
-    "description": "Monitors web pages and makes web requests.",
-    "permissions": [
-      "webRequest",
-      "activeTab",
-      "tabs",
-      "storage"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-    "host_permissions": [
-      "<all_urls>"
-    ],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": "logo.png"
+  "manifest_version": 3,
+  "name": "Web Page Monitor",
+  "version": "1.0",
+  "description": "Monitors web pages and makes web requests.",
+  "permissions": [
+    "webRequest",
+    "activeTab",
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "logo.png"
   }
+}
