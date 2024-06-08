@@ -107,7 +107,6 @@ async function main() {
     "hot wallet setup"
   );
 
-
   await createTrustLine(hot_wallet, cold_wallet, client);
   await createTrustLine(user_wallet, hot_wallet, client);
 
