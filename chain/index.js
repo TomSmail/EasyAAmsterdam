@@ -64,6 +64,15 @@ async function createTrustLine(target_wallet, cold_wallet, client) {
   );
 }
 
+async function countTotalGoodCarbon(client, target_wallet) {
+  const normal_response = await client.request({
+    method: "account_lines",
+    account: target_wallet.classicAddress,
+  });
+  return normal_response.result.lines.filter((trust) => trust.currency == CURRENCY_CODE).map(trust => parseInt(trust.balance)).reduce((partialSum, a) => partialSum + a, 0);
+}
+
+
 // Wrap code in an async function so we can use await
 async function main() {
   // Define the network client
@@ -74,9 +83,6 @@ async function main() {
   const cold_wallet = xrpl.Wallet.fromSeed("sEdVXHxYogo9F3oB2nURQ1rnN86PjKp");
   const hot_wallet = xrpl.Wallet.fromSeed("sEd7j1xLuF79RgEoDmsRapeLnFufYQ8");
   const user_wallet = xrpl.Wallet.fromSeed("sEdTCbAQLZ2c1AB7tSswWDpUASEEsA7");
-
-  console.log(cold_wallet.address);
-  console.log(hot_wallet.address);
 
   await do_transaction(
     {
