@@ -11,10 +11,12 @@
  - The positive ones cannot be traded but negative ones
  - Login with google stuff / "Zero knowledge login thing"
  - Market making / find someone to buy negative from
+ - chain writer
 ### AI
  - Determine carbon cost
 ### Website
  - Amount used
+    - chain reader
  - Buy offset button
  - Plant tree button
 
