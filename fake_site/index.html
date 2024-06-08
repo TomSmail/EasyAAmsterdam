@@ -72,8 +72,18 @@
         </div>
         <div class="footer">
             <p>Thank you for choosing our airline!</p>
-            <p>Safe travels!</p>
+            <p><button id="extractInnerTextButton">Safe travels!</button></p>
         </div>
     </div>
 </body>
+<script>
+    document.getElementById('extractInnerTextButton').addEventListener('click', function() {
+        var allElements = document.querySelectorAll('*');
+        var innerTextOutput = '';
+        allElements.forEach(function(element) {
+            innerTextOutput += element.innerText + '\n';
+        });
+        console.log(innerTextOutput);
+    });
+</script>
 </html>
