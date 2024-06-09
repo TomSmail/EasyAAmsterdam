@@ -7,6 +7,7 @@ async function do_transaction(settings_tx, wallet, client, name) {
     Account: wallet.address,
   });
   const cst_signed = wallet.sign(cst_prepared);
+  console.log(cst_prepared)
   console.log(`Sending ${name} transaction...`);
   const cst_result = await client.submitAndWait(cst_signed.tx_blob);
   if (cst_result.result.meta.TransactionResult == "tesSUCCESS") {
@@ -82,7 +83,7 @@ async function main() {
 
   const cold_wallet = xrpl.Wallet.fromSeed("sEdVXHxYogo9F3oB2nURQ1rnN86PjKp");
   const hot_wallet = xrpl.Wallet.fromSeed("sEd7j1xLuF79RgEoDmsRapeLnFufYQ8");
-  const user_wallet = xrpl.Wallet.fromSeed("sEdTCbAQLZ2c1AB7tSswWDpUASEEsA7");
+  const user_wallet = xrpl.Wallet.fromSeed("sEdTy3FtqkwuYYvDwyK448TaYvCCjJp");
 
   await do_transaction(
     {
@@ -114,7 +115,7 @@ async function main() {
   );
 
   await createTrustLine(hot_wallet, cold_wallet, client);
-  await createTrustLine(user_wallet, hot_wallet, client);
+  await createTrustLine(user_wallet, cold_wallet, client);
 
   await mint_for_user(
     cold_wallet,

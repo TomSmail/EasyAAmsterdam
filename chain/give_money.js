@@ -25,7 +25,7 @@ async function main() {
   const client = new xrpl.Client("wss://s.altnet.rippletest.net:51233");
   await client.connect();
 
-  const cold_wallet = xrpl.Wallet.fromSeed("sEdVXHxYogo9F3oB2nURQ1rnN86PjKp");
+  const cold_wallet = xrpl.Wallet.fromSeed("sEdTCbAQLZ2c1AB7tSswWDpUASEEsA7");
 
 
   await do_transaction(
@@ -33,7 +33,7 @@ async function main() {
       TransactionType: "Payment",
       Account: cold_wallet.address,
       Amount: "50000000",
-      Destination: "rsobW2L9hPSw8zvEhLjBWDXM3AD8gYQW6K"
+      Destination: "ransdawCWvNbESVkjnt32vvLXk1GaKKU7G"
     },cold_wallet,
     client,
     "try to give me money"
