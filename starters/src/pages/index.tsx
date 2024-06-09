@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import sdk from "@crossmarkio/sdk";
 import { countTotalGoodCarbon, countTotalBadCarbon, user_trusts_us, make_user_trust_us, mintShameToken, mint_for_user } from "./xrp";
-import { Application } from '@splinetool/runtime';
+import Spline from '@splinetool/react-spline';
+// import { Application } from '@splinetool/runtime';
 
 function get(name) {
   if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
@@ -16,6 +17,7 @@ function App() {
   const [submitTransactionResponse, setSubmitTransactionResponse] =
     useState("");
   const canvas = useRef<HTMLCanvasElement>(null)
+  const splineRef = useRef();
 
   const [yourCO2, setYourCO2] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -56,24 +58,9 @@ function App() {
     })
     setTransactions(mtrans);
     console.log("Done loading");
+    if (splineRef.current) splineRef.current.setVariable('Number', 10);
   }
 
-  useEffect(() => {
-    console.log("TESTING")
-    console.log(canvas.current)
-    if (canvas.current) {
-      console.log("CANVASSSSSS")
-      const spline = new Application(canvas.current);
-      console.log("HEEEEEEEEEEEEEEEEEE")
-
-      // Load the Spline scene and then set the variable based on the URL parameter
-      spline.load('https://prod.spline.design/ZG6rk6K21nQwSlSD/scene.splinecode')
-        .then(() => {
-          console.log("HELLLLO")
-          spline.setVariable('number', 400);
-        });
-    }
-  }, [canvas]);
 
   useEffect(() => {
     const trans = localStorage.getItem("transactions")
@@ -140,7 +127,7 @@ function App() {
             </div>
           )}
           <div className="h-1/4 my-10 w-full bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-            <canvas id="canvas3d" ref={canvas}></canvas>
+            <Spline scene="http://localhost:8010/proxy/ZG6rk6K21nQwSlSD/scene.splinecode" onLoad={(spline) => {splineRef.current = spline}}/>
           </div>
           <div className="w-full text-center">
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
