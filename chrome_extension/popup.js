@@ -2,6 +2,11 @@ import { getActiveTabURL } from "./utils.js";
 
 const CO2_MULTIPLIER = 0.15
 
+const movePage = (url) => {
+	// chrome.tabs.create({'url': url});
+	console.log(url)
+}
+
 document.getElementById('getText').addEventListener('click', () => {
   console.log("Click")
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -9,29 +14,45 @@ document.getElementById('getText').addEventListener('click', () => {
 			console.log(response);
 			const innerText = response.innerText;
 			const prompt1 = `Extract the departure and arrival location from this text: ${innerText}' and just return it as JSON in the form: {departure: <city1>, arrival: <city2>}`;
-      document.getElementById('output').innerText = innerText;
+      // document.getElementById('output').innerText = innerText;
 			let description = ''
 			const distance = openAiRequest(prompt1)
 				.then(locations => {
 					console.log(`Locations data: ${locations}`)
 					locations = JSON.parse(locations)
+					// Exit out to catch case if GPT has issues
 					if (typeof locations.departure !== undefined && typeof locations.arrival !== undefined) {
 						description = `Flight from ${locations.departure} to ${locations.arrival}`
 						console.log(locations);
 						const prompt2 = `Return the distance between these two places: ${locations.departure} and ${locations.arrival} in kilometers and nothing else`
 						openAiRequest(prompt2)
 							.then(distance => {
+								if (distance) {
 									console.log(distance);
 									// Calculate URL
-									const carbon = distance * CO2_MULTIPLIER
-									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+									const carbon = Math.round(parseInt(distance) * CO2_MULTIPLIER);
+									const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
+									console.log("HELLO1")
 									// Go to this URL in new tab
-									chrome.tabs.create({'url': url});
+									movePage(url)
+								} else {
+									console.error("GPT returned NaN")
+									const carbon = 55 // Place holder value incase gpt goes wrong
+									const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
+									console.log("HELLO2")
+									// Go to this URL in new tab
+									movePage(url)
 								}
+							}
 						);
 					} else {
 						console.error("GPT did not return correct output")
-						return 0;
+						const carbon = 55; // Place holder value incase gpt goes wrong
+						description = 'Flight from LHR to AMS'; // Place holder for destination
+						console.log("HELLO3")
+						const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
+						// Go to this URL in new tab
+						movePage(url)
 					}
 				}
 			);
