@@ -24,7 +24,7 @@ document.getElementById('getText').addEventListener('click', () => {
 									console.log(distance);
 									// Calculate URL
 									const carbon = distance * CO2_MULTIPLIER
-									const url = `https://12312312.com?distance=${distance}&description=${description}`
+									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
 									// Go to this URL in new tab
 									chrome.tabs.create({'url': url});
 								}
