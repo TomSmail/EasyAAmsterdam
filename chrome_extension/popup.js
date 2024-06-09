@@ -26,13 +26,13 @@ document.getElementById('getText').addEventListener('click', () => {
 									console.log(distance);
 									// Calculate URL
 									const carbon = distance * CO2_MULTIPLIER;
-									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+									const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
 									// Go to this URL in new tab
 									chrome.tabs.create({'url': url});
 								} else {
 									console.error("GPT returned NaN")
 									const carbon = 55 // Place holder value incase gpt goes wrong
-									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+									const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
 									// Go to this URL in new tab
 									chrome.tabs.create({'url': url});
 								}
@@ -41,8 +41,8 @@ document.getElementById('getText').addEventListener('click', () => {
 					} else {
 						console.error("GPT did not return correct output")
 						const carbon = 55; // Place holder value incase gpt goes wrong
-						description = 'Flight from LHR to AMS';
-						const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+						description = 'Flight from LHR to AMS'; // Place holder for destination
+						const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
 						// Go to this URL in new tab
 						chrome.tabs.create({'url': url});
 					}
