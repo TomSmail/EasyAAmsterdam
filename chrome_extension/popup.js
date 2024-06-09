@@ -9,7 +9,7 @@ document.getElementById('getText').addEventListener('click', () => {
 			console.log(response);
 			const innerText = response.innerText;
 			const prompt1 = `Extract the departure and arrival location from this text: ${innerText}' and just return it as JSON in the form: {departure: <city1>, arrival: <city2>}`;
-      document.getElementById('output').innerText = innerText;
+      // document.getElementById('output').innerText = innerText;
 			let description = ''
 			const distance = openAiRequest(prompt1)
 				.then(locations => {
