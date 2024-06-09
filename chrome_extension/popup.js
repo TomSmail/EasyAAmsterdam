@@ -15,23 +15,36 @@ document.getElementById('getText').addEventListener('click', () => {
 				.then(locations => {
 					console.log(`Locations data: ${locations}`)
 					locations = JSON.parse(locations)
+					// Exit out to catch case if GPT has issues
 					if (typeof locations.departure !== undefined && typeof locations.arrival !== undefined) {
 						description = `Flight from ${locations.departure} to ${locations.arrival}`
 						console.log(locations);
 						const prompt2 = `Return the distance between these two places: ${locations.departure} and ${locations.arrival} in kilometers and nothing else`
 						openAiRequest(prompt2)
 							.then(distance => {
+								if (typeof locations.departure !== undefined) {
 									console.log(distance);
 									// Calculate URL
-									const carbon = distance * CO2_MULTIPLIER
+									const carbon = distance * CO2_MULTIPLIER;
+									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+									// Go to this URL in new tab
+									chrome.tabs.create({'url': url});
+								} else {
+									console.error("GPT returned NaN")
+									const carbon = 55 // Place holder value incase gpt goes wrong
 									const url = `https://12312312.com?carbon=${carbon}&description=${description}`
 									// Go to this URL in new tab
 									chrome.tabs.create({'url': url});
 								}
+							}
 						);
 					} else {
 						console.error("GPT did not return correct output")
-						return 0;
+						const carbon = 55; // Place holder value incase gpt goes wrong
+						description = 'Flight from LHR to AMS';
+						const url = `https://12312312.com?carbon=${carbon}&description=${description}`
+						// Go to this URL in new tab
+						chrome.tabs.create({'url': url});
 					}
 				}
 			);
