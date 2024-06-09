@@ -3,7 +3,7 @@ import { getActiveTabURL } from "./utils.js";
 const CO2_MULTIPLIER = 0.15
 
 const movePage = (url) => {
-	// chrome.tabs.create({'url': url});
+	chrome.tabs.create({'url': url});
 	console.log(url)
 }
 
@@ -54,16 +54,10 @@ document.getElementById('getText').addEventListener('click', () => {
 						console.error("GPT did not return correct output")
 						const carbon = 55; // Place holder value incase gpt goes wrong
 						description = 'Flight from LHR to AMS'; // Place holder for destination
-<<<<<<< HEAD
 						console.log("HELLO3")
 						const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
 						// Go to this URL in new tab
 						movePage(url)
-=======
-						const url = `http://localhost:3000?carbon=${carbon}&description=${description}`
-						// Go to this URL in new tab
-						chrome.tabs.create({'url': url});
->>>>>>> cbc01171692785ea628aca6b701bc342b7cbcf39
 					}
 				}
 			);
