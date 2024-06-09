@@ -58,6 +58,21 @@ function App() {
     console.log("Done loading");
   }
 
+  const [flashCO2, setFlashCO2] = useState(false);
+  const [flashOffset, setFlashOffset] = useState(false);
+
+  useEffect(() => {
+    setFlashCO2(true);
+    const timer = setTimeout(() => setFlashCO2(false), 500);
+    return () => clearTimeout(timer);
+  }, [yourCO2]);
+
+  useEffect(() => {
+    setFlashOffset(true);
+    const timer = setTimeout(() => setFlashOffset(false), 500);
+    return () => clearTimeout(timer);
+  }, [offset]);
+
   useEffect(() => {
     console.log("TESTING")
     console.log(canvas.current)
@@ -110,89 +125,92 @@ function App() {
   }, [userWalletAddress, done])
 
   if (userWalletAddress === "") {
-    return (
-      <div className="font-mono flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-
-        <div className="flex flex-col w-11/12 sm:w-3/5 items-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome</h1>
-          <p className="text-2xl text-gray-600 dark:text-gray-300 mb-6">You need to log in</p>
-          <button className="mt-4 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700">
-            Log In
-          </button>
+    return (<div className="font-mono flex flex-col items-center justify-center min-h-screen bg-[#F6F4F0] dark:bg-gray-900">
+    <div className="flex flex-col w-11/12 sm:w-3/5 items-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
+      <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome</h1>
+      <p className="text-2xl text-gray-600 dark:text-gray-300 mb-6">You need to log in</p>
+      <button className="mt-4 py-2 px-4 bg-[#597766] text-white rounded-lg hover:bg-[#475d50] focus:ring-2 focus:ring-[#CC9F00] focus:outline-none dark:bg-[#475d50] dark:hover:bg-[#3b4e41]">
+        Log In
+      </button>
+    </div>
+  </div>
+);
+} else {
+return (
+  <div className="font-mono flex flex-col items-center justify-center min-h-screen bg-[#F6F4F0] dark:bg-gray-900">
+    <div className="flex flex-col w-11/12 sm:w-3/5 items-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
+      <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">Offset</h1>
+      <div className="text-center mb-6">
+      <h2 className={`text-2xl text-gray-600 dark:text-gray-300 transition-colors duration-500 ${flashCO2 ? 'bg-green-200' : ''}`}>
+              Total CO2: {yourCO2}kg CO2 equiv.
+            </h2>
+            <h2 className={`text-2xl text-gray-600 dark:text-gray-300 transition-colors duration-500 ${flashOffset ? 'bg-green-200' : ''}`}>
+              Total Offset: {offset}kg CO2 equiv.
+            </h2>
+      </div>
+      {addLoading && (
+        <div className="text-gray-600 dark:text-gray-300">
+          <div className="flex items-center justify-center">
+            <div className="w-6 h-6 border-4 border-dashed rounded-full animate-spin border-[#CC9F00] dark:border-[#CC9F00] inline"></div>
+            <p className="ml-2"> Generating emissions token ({get("carbon")} kg) for {get("description")}...</p>
+          </div>
         </div>
-      </div>);
-  } else {
-    return (
-      <div className="font-mono flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col w-11/12 sm:w-3/5 items-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">Offset</h1>
-          <div className="text-center mb-6">
-            <h2 className="text-2xl text-gray-600 dark:text-gray-300">Total CO2: {yourCO2}kg CO2 equiv.</h2>
-            <h2 className="text-2xl text-gray-600 dark:text-gray-300">Total Offset: {offset}kg CO2 equiv.</h2>
+      )}
+      <div className="h-1/4 my-10 w-full bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+        <canvas id="canvas3d" ref={canvas}></canvas>
+      </div>
+      <div className="w-full text-center">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          <div className="col-span-full">
+            <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-6 underline">Recent purchases</h1>
           </div>
-          {addLoading && (
-            <div className="text-gray-600 dark:text-gray-300">
-              <div className="flex items-center justify-center">
-                <div className="w-6 h-6 border-4 border-dashed rounded-full animate-spin border-blue-500 dark:border-blue-300 inline"></div>
-                <p className="ml-2"> Generating emissions token ({get("carbon")} kg) for {get("description")}...</p>
-
+          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+            <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">Done</h2>
+            {done.map((x, _) => (
+              <div className="pb-3" key={x.description}>
+                <p className="inline-block pr-3 rounded-md p-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200">{x.description}</p>
               </div>
-            </div>
-          )}
-          <div className="h-1/4 my-10 w-full bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-            <canvas id="canvas3d" ref={canvas}></canvas>
+            ))}
           </div>
-          <div className="w-full text-center">
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-              <div className="col-span-full">
-                <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-6 underline">Recent purchases</h1>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">Done</h2>
-                {done.map((x, _) => (
-                  <div className="pb-3" key={x.description}>
-                    <p className="inline-block pr-3 rounded-md p-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200">{x.description}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md">
-                <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">Todo</h2>
-                {todo.map((x, i) => {
-                  let style;
+          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+            <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">Todo</h2>
+            {todo.map((x, i) => {
+              let style;
+              if (selected.includes(i)) {
+                style = "inline-block pr-3 rounded-md p-1 bg-[#CC9F00] dark:bg-[#CC9F00] text-gray-700 dark:text-gray-200";
+              } else {
+                style = "inline-block pr-3 rounded-md p-1 bg-gray-200 dark:bg-gray-500 text-gray-700 dark:text-gray-200";
+              }
+              return (
+                <div className="pb-3" key={x.description} onClick={() => {
+                  let nselected = [...selected];
                   if (selected.includes(i)) {
-                    style = "inline-block pr-3 rounded-md p-1 bg-green-300 dark:bg-green-600 text-gray-700 dark:text-gray-200"
+                    nselected = nselected.filter((x) => x != i);
                   } else {
-                    style = "inline-block pr-3 rounded-md p-1 bg-gray-200 dark:bg-gray-500 text-gray-700 dark:text-gray-200"
+                    nselected.push(i);
                   }
-                  return (<div className="pb-3" key={x.description} onClick={() => {
-                    console.log("print")
-                    let nselected = [...selected];
-                    if (selected.includes(i)) {
-                      nselected = nselected.filter((x) => x != i);
-                    } else {
-                      nselected.push(i);
-                    }
-                    setSelected(nselected);
-                  }}>
-                    <p className={style}>{`${x.description} (${x.carbon}kg)`}</p>
-                  </div>);
-                })}
-                {!loading ? (
-                  <button onClick={() => { setLoading(true); processCarbonCredits(selected); }} className="mt-4 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700">
-                    Buy All
-                  </button>
-                ) : (
-                  <div className="flex items-center justify-center">
-                    <div className="w-6 h-6 border-4 border-dashed rounded-full animate-spin border-blue-500 dark:border-blue-300"></div>
-                  </div>
-                )}
+                  setSelected(nselected);
+                }}>
+                  <p className={style}>{`${x.description} (${x.carbon}kg)`}</p>
+                </div>
+              );
+            })}
+            {!loading ? (
+              <button onClick={() => { setLoading(true); processCarbonCredits(selected); }} className="mt-4 py-2 px-4 bg-[#597766] text-white rounded-lg hover:bg-[#475d50] focus:ring-2 focus:ring-[#CC9F00] focus:outline-none dark:bg-[#475d50] dark:hover:bg-[#3b4e41]">
+                Buy All
+              </button>
+            ) : (
+              <div className="flex items-center justify-center">
+                <div className="w-6 h-6 border-4 border-dashed rounded-full animate-spin border-[#CC9F00] dark:border-[#CC9F00]"></div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
-
-    )
+    </div>
+  </div>
+);
+    
   }
 }
 
